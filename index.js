@@ -7,8 +7,10 @@ const loaders = require('./loaders');
 async function startServer() {
   loaders(app);
 
-  app.listen(process.env.PORT || 3001, () => {
-    console.log(`listening at ${process.env.PORT || 3001}...`);
+  const port = process.env.PORT || 3001;
+
+  app.listen(port, () => {
+    console.log(`listening at ${port}...`);
   });
 }
 
