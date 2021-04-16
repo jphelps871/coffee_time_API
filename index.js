@@ -5,8 +5,6 @@ require('dotenv').config();
 
 const loaders = require('./loaders');
 
-require('./db.js').connect();
-
 async function startServer() {
   loaders(app);
 
