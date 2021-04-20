@@ -10,8 +10,6 @@ module.exports = async (app) => {
 
   await routeLoader(app, passport);
 
-  console.log('Database_URL', process.env.DATABASE_URL);
-
   app.use((err, req, res, next) => {
     const { message, status } = err;
     console.log(message + '\n');
