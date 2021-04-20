@@ -1,7 +1,6 @@
 const expressLoader = require('./express');
 const passportLoader = require('./passport');
 const routeLoader = require('../routes');
-require('dotenv').config;
 
 module.exports = async (app) => {
   const expressApp = await expressLoader(app);
