@@ -5,12 +5,11 @@ const AccountService = require('../services/accountServices');
 const AccountServiceInstance = new AccountService();
 
 module.exports = (app) => {
-  app.use('api/account', checkAuthentication, router);
+  app.use('/api/account', checkAuthentication, router);
 
   router.get('/', async (req, res, next) => {
     try {
       const { id } = req.user;
-      console.log(req.user);
       const response = await AccountServiceInstance.getUserById(id);
 
       res.redirect('/' + id);
