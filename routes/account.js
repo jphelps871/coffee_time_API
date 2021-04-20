@@ -10,7 +10,7 @@ module.exports = (app) => {
   router.get('/', async (req, res, next) => {
     try {
       const { id } = req.user;
-
+      console.log(req.user);
       const response = await AccountServiceInstance.getUserById(id);
 
       res.redirect('/' + id);
@@ -52,4 +52,3 @@ module.exports = (app) => {
     }
   }
 };
-// console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
