@@ -44,7 +44,7 @@ module.exports = (app, passport) => {
 
       const response = await db.register(userCredentials);
 
-      res.send(response);
+      res.json({ message: response });
     } catch (err) {
       next(err);
     }
@@ -58,7 +58,8 @@ module.exports = (app, passport) => {
         const userCredentials = req.body;
 
         await db.login(userCredentials);
-        res.send('Logged in');
+
+        res.json({ message: 'Logged in' });
       } catch (err) {
         next(err);
       }
@@ -67,7 +68,7 @@ module.exports = (app, passport) => {
 
   router.get('/logout', (req, res) => {
     req.logout();
-    res.send('Logged Out');
+    res.json({ message: 'Logged out' });
   });
 
   // function checkAuthenticated(req, res, next) {
