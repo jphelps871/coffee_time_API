@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { body, validationResult, check } = require('express-validator');
 
 const UserService = require('../services/userServices');
 const db = new UserService();
@@ -10,6 +11,32 @@ module.exports = (app, passport) => {
   router.get('/', async (req, res) => {
     res.send(req.user);
   });
+
+  // Validate user credentials
+  router.use(
+    '/register',
+    check('password')
+      .isLength({ min: 5 })
+      .withMessage('must be at least 5 chars long')
+      .matches(/\d/)
+      .withMessage('must contain a number'),
+
+    check('email').isEmail().withMessage('Must be a valid email').trim(),
+
+    body('firstName').not().isEmpty().withMessage('Connot be empty').trim(),
+
+    body('lastName').not().isEmpty().withMessage('Connot be empty').trim(),
+
+    (req, res, next) => {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      next();
+    },
+  );
 
   router.post('/register', async (req, res, next) => {
     try {

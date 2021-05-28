@@ -4,6 +4,8 @@ const userService = new userModel();
 const bcrypt = require('bcrypt');
 
 module.exports = class UserService {
+  validateCredentials() {}
+
   async findByEmail(email) {
     try {
       const response = await userService.findByEmail(email);
