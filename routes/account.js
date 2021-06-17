@@ -10,9 +10,9 @@ module.exports = (app) => {
   router.get('/', async (req, res, next) => {
     try {
       const { id } = req.user;
-      const response = await AccountServiceInstance.getUserById(id);
+      await AccountServiceInstance.getUserById(id);
 
-      res.redirect('/' + id);
+      res.send({ user: id });
     } catch (err) {
       next(err);
     }

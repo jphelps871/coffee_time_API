@@ -10,8 +10,7 @@ module.exports = async (app) => {
   await routeLoader(app, passport);
 
   app.use((err, req, res, next) => {
-    const { message, status } = err;
-    console.log(message + '\n');
-    return res.status(status).send({ message });
+    const { error, status } = err;
+    return res.status(status).send(error);
   });
 };

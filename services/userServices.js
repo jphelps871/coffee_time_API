@@ -22,7 +22,11 @@ module.exports = class UserService {
     try {
       const emailExists = await this.findByEmail(userCredentials.email);
 
-      if (emailExists) return 'This email already exists';
+      if (emailExists)
+        throw {
+          status: 400,
+          error: [{ param: 'email', msg: 'This email already exists' }],
+        };
 
       userCredentials.password = await bcrypt.hash(
         userCredentials.password,
@@ -31,7 +35,7 @@ module.exports = class UserService {
 
       const response = await userService.register(userCredentials);
 
-      if (response) return 'Thank you for registering!';
+      if (response) return { message: 'Thank you for registering!' };
 
       throw createError(409, 'Unable to register user');
     } catch (err) {
@@ -43,11 +47,25 @@ module.exports = class UserService {
     try {
       const user = await this.findByEmail(email);
 
-      if (!user) throw createError(401, 'Incorrect email');
+      if (!user)
+        throw {
+          status: 400,
+          error: [
+            { param: 'email', msg: 'Incorrect email or password' },
+            { param: 'password', msg: 'Incorrect email or password' },
+          ],
+        };
 
       const passwordCorrect = await bcrypt.compare(password, user.password);
 
-      if (!passwordCorrect) throw createError(404, 'Incorrect password');
+      if (!passwordCorrect)
+        throw {
+          status: 400,
+          error: [
+            { param: 'email', msg: 'Incorrect email or password' },
+            { param: 'password', msg: 'Incorrect email or password' },
+          ],
+        };
 
       return user;
     } catch (err) {

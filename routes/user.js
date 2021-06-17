@@ -14,7 +14,7 @@ module.exports = (app, passport) => {
 
   // Validate user credentials
   router.use(
-    '/register',
+    '/',
     check('password')
       .isLength({ min: 5 })
       .withMessage('must be at least 5 chars long')
@@ -23,15 +23,15 @@ module.exports = (app, passport) => {
 
     check('email').isEmail().withMessage('Must be a valid email').trim(),
 
-    body('firstName').not().isEmpty().withMessage('Connot be empty').trim(),
-
-    body('lastName').not().isEmpty().withMessage('Connot be empty').trim(),
-
     (req, res, next) => {
-      const errors = validationResult(req);
+      try {
+        const errors = validationResult(req);
 
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) {
+          throw { status: 400, error: errors.array() };
+        }
+      } catch (err) {
+        next(err);
       }
 
       next();
@@ -44,7 +44,7 @@ module.exports = (app, passport) => {
 
       const response = await db.register(userCredentials);
 
-      res.json({ message: response });
+      res.json(response);
     } catch (err) {
       next(err);
     }

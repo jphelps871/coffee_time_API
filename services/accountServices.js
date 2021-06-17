@@ -7,7 +7,11 @@ module.exports = class AccountService {
   async getUserById(id) {
     const response = await AccountModelInstance.getUserById(id);
 
-    if (!response) throw createError(401, 'Sorry, you are unauthorized');
+    if (!response)
+      throw {
+        status: 401,
+        error: [{ param: 'account', msg: 'Sorry, you are unauthorized' }],
+      };
 
     return response;
   }
