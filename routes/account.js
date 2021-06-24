@@ -11,16 +11,15 @@ module.exports = (app) => {
     try {
       const { id } = req.user;
       await AccountServiceInstance.getUserById(id);
-
-      res.send({ user: id });
+      res.send('Successful login');
     } catch (err) {
       next(err);
     }
   });
 
-  router.put('/:id', async (req, res, next) => {
+  router.put('/', async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
       const { column, value } = req.body;
 
       const response = await AccountServiceInstance.update(column, value, id);
@@ -31,9 +30,9 @@ module.exports = (app) => {
     }
   });
 
-  router.delete('/:id', async (req, res, next) => {
+  router.delete('/', async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
 
       const response = await AccountServiceInstance.delete(id);
 
@@ -44,10 +43,17 @@ module.exports = (app) => {
   });
 
   function checkAuthentication(req, res, next) {
-    if (req.isAuthenticated()) {
-      next();
-    } else {
-      res.send('Please login');
+    try {
+      if (req.isAuthenticated()) {
+        next();
+      } else {
+        throw {
+          status: 401,
+          error: [{ param: 'account', msg: 'Sorry, you are unauthorized' }],
+        };
+      }
+    } catch (err) {
+      next(err);
     }
   }
 };

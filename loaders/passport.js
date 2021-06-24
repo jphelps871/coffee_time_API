@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-
 const UserService = require('../services/userServices');
 const userServiceInstance = new UserService();
 
