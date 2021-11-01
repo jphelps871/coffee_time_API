@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body, validationResult, check } = require('express-validator');
+const { validationResult, check } = require('express-validator');
 
 const UserService = require('../services/userServices');
 const db = new UserService();
@@ -10,6 +10,16 @@ module.exports = (app, passport) => {
 
   router.get('/', async (req, res) => {
     res.send(req.user);
+  });
+
+  router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+      res.statusCode = 200;
+      res.json({ 
+        message: 'Logged out!' ,
+        status: 200
+      });
+    });
   });
 
   // Validate user credentials
@@ -65,11 +75,6 @@ module.exports = (app, passport) => {
       }
     },
   );
-
-  router.get('/logout', (req, res) => {
-    req.logout();
-    res.json({ message: 'Logged out' });
-  });
 
   // function checkAuthenticated(req, res, next) {
   //   if (req.isAuthenticated()) {
